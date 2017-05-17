@@ -30,23 +30,12 @@ public class DownloadTask extends AsyncTask<String, Void, Void> {
     protected Void doInBackground(String... params) {
 
         String phoneNo = params[0];
-
         mUrl = mUrl + phoneNo + ".png";
-
         mOutputUri = getOutputUri(phoneNo);
 
-        Bitmap bitmap;
+        Bitmap bitmap = getBitmapFromNetwork();
 
-        try {
-            InputStream inputStream = (new URL(mUrl)).openStream();
-
-            bitmap = BitmapFactory.decodeStream(inputStream);
-
-            writeBitmapToUri(mContext, bitmap, mOutputUri);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        writeBitmapToUri(mContext, bitmap, mOutputUri);
 
         return null;
     }
@@ -66,6 +55,26 @@ public class DownloadTask extends AsyncTask<String, Void, Void> {
 
         return uri;
     }
+
+
+
+    private Bitmap getBitmapFromNetwork() {
+
+        Bitmap bitmap = null;
+
+        try {
+            InputStream inputStream = (new URL(mUrl)).openStream();
+
+            bitmap = BitmapFactory.decodeStream(inputStream);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return bitmap;
+
+    }
+
 
 
     private void writeBitmapToUri(Context context, Bitmap bitmap, Uri uri) {
